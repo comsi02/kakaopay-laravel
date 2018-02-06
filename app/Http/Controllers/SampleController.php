@@ -28,6 +28,6 @@ class SampleController extends Controller
 
         // pc
         $data = [ 'response' => $readyResponse ];
-        return \View::make('pc.layer.ready')->with($data);
+        return \View::make("$agent.$opentype.ready")->with($data);
     }
 }
