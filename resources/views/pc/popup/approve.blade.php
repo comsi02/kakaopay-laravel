@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>승인 결과(result of approval)</h1>
-<p th:text="${response}"></p>
+<p th:text="{{$response}}"></p>
 <a href="javascript:closePopup();" target="_parent">close</a>
 </body>
 <script>

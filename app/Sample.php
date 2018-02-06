@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sample extends Model
 {
-	public static function ready($agent, $openType) {
+	private $tid;
+
+	public function ready($agent, $openType) {
 
         $properties = \Config::get('kakaopay.properties');
+		$client = new \GuzzleHttp\Client();
 
         $form_params = [];
         $form_params["cid"] = $properties['cid'];                       // 가맹점 코드
@@ -24,8 +27,7 @@ class Sample extends Model
         $form_params["cancel_url"] = $properties['sample_host']."/cancel/$agent/$openType";     // 결제취소 redirect url
         $form_params["fail_url"] = $properties['sample_host']."/fail/$agent/$openType";         // 결제실패 redirect url
 
-		$client = new \GuzzleHttp\Client();
-        $readyResponse = $client->post('https://kapi.kakao.com/v1/payment/ready', [
+        $request = $client->post('https://kapi.kakao.com/v1/payment/ready', [
             'headers' => [
                 'Authorization' => 'KakaoAK '.$properties['kakao_api_admin_key'],
                 'Content-Type' => 'application/x-www-form-urlencoded',
@@ -33,6 +35,37 @@ class Sample extends Model
             'form_params' => $form_params
         ]);
 
-        return json_decode((string)$readyResponse->getBody());
+		$readyResponse = json_decode((string)$request->getBody());
+		$this->tid = $readyResponse->tid;
+
+        return $readyResponse;
+	}
+
+	public function approve($pgToken) {
+        $properties = \Config::get('kakaopay.properties');
+		$client = new \GuzzleHttp\Client();
+
+        $form_params = [];
+        $form_params["cid"] = $properties['cid'];                       // 가맹점 코드
+        $form_params["tid"] = $this->tid;          						// 결제 고유번호
+        $form_params["partner_order_id"] = "1";  						// 주문번호(ready할 때 사용했던 값)
+        $form_params["partner_user_id"] = "1";   						// 회원 ID(ready할 때 사용했던 값)
+        $form_params["pg_token"] = $pgToken;      						// pg token
+
+		try {
+        	$request = $client->post('https://kapi.kakao.com/v1/payment/approve', [
+            	'headers' => [
+                	'Authorization' => 'KakaoAK '.$properties['kakao_api_admin_key'],
+                	'Content-Type' => 'application/x-www-form-urlencoded',
+            	],
+            	'form_params' => $form_params
+        	]);
+
+			$approveResponse = $request->getBody();
+
+			return $approveResponse;
+		} catch (Exception $e) {
+			return $e;
+		}
 	}
 }
