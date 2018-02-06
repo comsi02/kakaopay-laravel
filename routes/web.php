@@ -15,14 +15,5 @@ Route::get('/', function () {
     return view('index');
 });
 
-# PC layer
-Route::get('/ready/pc/layer', function () { return view('pc/layer/ready'); });
-
-# PC popup
-Route::get('/ready/pc/popup', function () { return view('pc/popup/ready'); });
-
-# Mobile 
-Route::get('/ready/mobile/redirect', function () { return view('mobile/redirect/approve'); });
-
-# Webview
-Route::get('/ready/app/webview', function () { return view('app/webview/ready'); });
+# ready
+Route::get('/ready/{agent}/{opentype}',     ['as' => 'sample_ready',        'uses' => 'SampleController@ready']);

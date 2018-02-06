@@ -69,7 +69,7 @@
         })()
     };
 
-    kakaopay.showTms([[${response.next_redirect_pc_url}]]);
+    kakaopay.showTms("{{$response->next_redirect_pc_url}}");
 </script>
 </html>
 
