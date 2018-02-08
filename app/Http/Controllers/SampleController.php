@@ -10,6 +10,7 @@ class SampleController extends Controller
     private $SampleService;
 
     function __construct() {
+        // Sample 모델에서 return 받은 TID 를 approve 에서 이용할 수 있는 방법을 고민해야함.
         $this->SampleService = new Sample();
     }
 
