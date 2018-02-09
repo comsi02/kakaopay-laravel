@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sample extends Model
 {
-	private $tid;
+    private $tid;
 
-	public function ready($agent, $openType) {
+    public function ready($agent, $openType) {
 
         $properties = \Config::get('kakaopay.properties');
-		$client = new \GuzzleHttp\Client();
+        $client = new \GuzzleHttp\Client();
 
         $form_params = [];
         $form_params["cid"] = $properties['cid'];                       // 가맹점 코드
@@ -35,37 +35,37 @@ class Sample extends Model
             'form_params' => $form_params
         ]);
 
-		$readyResponse = json_decode((string)$request->getBody());
-		$this->tid = $readyResponse->tid;
+        $readyResponse = json_decode((string)$request->getBody());
+        $this->tid = $readyResponse->tid;
 
         return $readyResponse;
-	}
+    }
 
-	public function approve($pgToken) {
+    public function approve($pgToken) {
         $properties = \Config::get('kakaopay.properties');
-		$client = new \GuzzleHttp\Client();
+        $client = new \GuzzleHttp\Client();
 
         $form_params = [];
         $form_params["cid"] = $properties['cid'];                       // 가맹점 코드
-        $form_params["tid"] = $this->tid;          						// 결제 고유번호
-        $form_params["partner_order_id"] = "1";  						// 주문번호(ready할 때 사용했던 값)
-        $form_params["partner_user_id"] = "1";   						// 회원 ID(ready할 때 사용했던 값)
-        $form_params["pg_token"] = $pgToken;      						// pg token
+        $form_params["tid"] = $this->tid;                                  // 결제 고유번호
+        $form_params["partner_order_id"] = "1";                          // 주문번호(ready할 때 사용했던 값)
+        $form_params["partner_user_id"] = "1";                           // 회원 ID(ready할 때 사용했던 값)
+        $form_params["pg_token"] = $pgToken;                              // pg token
 
-		try {
-        	$request = $client->post('https://kapi.kakao.com/v1/payment/approve', [
-            	'headers' => [
-                	'Authorization' => 'KakaoAK '.$properties['kakao_api_admin_key'],
-                	'Content-Type' => 'application/x-www-form-urlencoded',
-            	],
-            	'form_params' => $form_params
-        	]);
+        try {
+            $request = $client->post('https://kapi.kakao.com/v1/payment/approve', [
+                'headers' => [
+                    'Authorization' => 'KakaoAK '.$properties['kakao_api_admin_key'],
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ],
+                'form_params' => $form_params
+            ]);
 
-			$approveResponse = $request->getBody();
+            $approveResponse = $request->getBody();
 
-			return $approveResponse;
-		} catch (Exception $e) {
-			return $e;
-		}
-	}
+            return $approveResponse;
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
 }
