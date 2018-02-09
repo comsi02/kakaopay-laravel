@@ -41,16 +41,16 @@ class Sample extends Model
         return $readyResponse;
     }
 
-    public function approve($pgToken) {
+    public function approve($pgToken,$tid) {
         $properties = \Config::get('kakaopay.properties');
         $client = new \GuzzleHttp\Client();
 
         $form_params = [];
         $form_params["cid"] = $properties['cid'];                       // 가맹점 코드
-        $form_params["tid"] = $this->tid;                                  // 결제 고유번호
-        $form_params["partner_order_id"] = "1";                          // 주문번호(ready할 때 사용했던 값)
-        $form_params["partner_user_id"] = "1";                           // 회원 ID(ready할 때 사용했던 값)
-        $form_params["pg_token"] = $pgToken;                              // pg token
+        $form_params["tid"] = $tid;                                     // 결제 고유번호
+        $form_params["partner_order_id"] = "1";                         // 주문번호(ready할 때 사용했던 값)
+        $form_params["partner_user_id"] = "1";                          // 회원 ID(ready할 때 사용했던 값)
+        $form_params["pg_token"] = $pgToken;                            // pg token
 
         try {
             $request = $client->post('https://kapi.kakao.com/v1/payment/approve', [

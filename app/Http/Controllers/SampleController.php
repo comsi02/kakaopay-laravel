@@ -17,6 +17,7 @@ class SampleController extends Controller
     public function ready(Request $req, $agent, $opentype) {
 
         $readyResponse = $this->SampleService->ready($agent, $opentype);
+        $req->session()->put('TID',$readyResponse->tid);
 
         $data = [];
 
@@ -39,7 +40,7 @@ class SampleController extends Controller
     }
 
     public function approve(Request $req, $agent, $opentype) {
-        $approveResponse = $this->SampleService->approve($req['pgToken']);
+        $approveResponse = $this->SampleService->approve($req['pgToken'],$req->session('TID'));
         $data = [ 'response' => $approveResponse ];
         return \View::make("$agent.$opentype.approve")->with($data);
     }
