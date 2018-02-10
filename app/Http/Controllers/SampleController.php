@@ -17,7 +17,7 @@ class SampleController extends Controller
     public function ready(Request $req, $agent, $opentype) {
 
         $readyResponse = $this->SampleService->ready($agent, $opentype);
-        $req->session()->put('TID',$readyResponse->tid);
+        $req->session()->push('TID',$readyResponse->tid);
 
         $data = [];
 
@@ -40,7 +40,7 @@ class SampleController extends Controller
     }
 
     public function approve(Request $req, $agent, $opentype) {
-        $approveResponse = $this->SampleService->approve($req['pgToken'],$req->session('TID'));
+        $approveResponse = $this->SampleService->approve($req['pg_token'],$req->session()->pull('TID')[0]);
         $data = [ 'response' => $approveResponse ];
         return \View::make("$agent.$opentype.approve")->with($data);
     }
@@ -52,31 +52,4 @@ class SampleController extends Controller
     public function fail(Request $req, $agent, $opentype) {
         return \View::make("$agent.$opentype.fail");
     }
-
-    /*
-   @GetMapping("/approve/{agent}/{openType}")
-    public String approve(@PathVariable("agent") String agent, @PathVariable("openType") String openType, @RequestParam("pg_token") String pgToken, Model model) {
-        String approveResponse = sampleService.approve(pgToken);
-        model.addAttribute("response", approveResponse);
-        return agent + "/" + openType + "/approve";
-    }
-
-    @GetMapping("/cancel/{agent}/{openType}")
-    public String cancel(@PathVariable("agent") String agent, @PathVariable("openType") String openType) {
-        // 주문건이 진짜 취소되었는지 확인 후 취소 처리
-        // 결제내역조회(/v1/payment/status) api에서 status를 확인한다.
-        // To prevent the unwanted request cancellation caused by attack,
-        // the “show payment status” API is called and then check if the status is QUIT_PAYMENT before suspending the payment
-        return agent + "/" + openType + "/cancel";
-    }
-
-    @GetMapping("/fail/{agent}/{openType}")
-    public String fail(@PathVariable("agent") String agent, @PathVariable("openType") String openType) {
-        // 주문건이 진짜 실패되었는지 확인 후 실패 처리
-        // 결제내역조회(/v1/payment/status) api에서 status를 확인한다.
-        // To prevent the unwanted request cancellation caused by attack,
-        // the “show payment status” API is called and then check if the status is FAIL_PAYMENT before suspending the payment
-        return agent + "/" + openType + "/fail";
-    }
-     */
 }
