@@ -34,3 +34,7 @@ KakaoDevelopers(https://developer.kakao.com) 발급 받은 어드민키를 confi
 - vi config/kakaopay.php
 - properties -> sample_host
 
+## Server
+
+Laravel development server 로 실행
+- php artisan serve --host=127.0.0.1 --port=8000
