@@ -22,7 +22,7 @@ return [
         'cid' => 'TC0ONETIME',
 
         # Callback Service url
-        'sample.host '=> 'http://localhost:8080'
+        'sample_host'=> 'http://localhost:8080'
     ],
 
     'confirmation' => [
