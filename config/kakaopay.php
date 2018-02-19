@@ -15,16 +15,14 @@ return [
     'properties' => [
         # KakaoDevelopers 에서 앱 생성 후 발급받은 admin key
         # Admin key created by App of KakaoDevelopers
-        #'kakao_api_admin_key' => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-        'kakao_api_admin_key' => '52574994b65b11904e53514441a2a36d',
+        'kakao_api_admin_key' => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 
         # Kakao로부터 전달받은 가맹점 ID
         # partner payment id from KakaoPay
         'cid' => 'TC0ONETIME',
 
         # Callback Service url
-        #'sample.host '=> 'http://localhost:8080'
-        'sample_host' => 'http://comsi02.befreesoul.com',
+        'sample.host '=> 'http://localhost:8080'
     ],
 
     'confirmation' => [
